@@ -27,9 +27,9 @@
   <script src="vendors/jquery/dist/jquery.min.js"></script>
   <script>
     var wsbroker = "13.125.249.130"; //mqtt websocket enabled broker
-    //var wsbroker = "192.168.0.53"; //mqtt websocket enabled broker
-    //var wsbroker = "192.168.0.53"; //mqtt websocket enabled broker
+
     var wsport = 9001; // port for above
+    var ffserverFeedIP = "192.168.0.111";
     var index = []; // this is canvas index
     var socketArray = [];
     var chart_tab_panel_index = 0;
@@ -94,7 +94,7 @@
           //alert("재난 발생!");
           isStreaming[selectedChartTabIn] = 1;
           var streamingTag = $("img#streamingTag" + selectedChartTabIn);
-          streamingTag.attr("src", "http://192.168.0.45:8090/" + topic + ".mjpg");
+          streamingTag.attr("src", "http://" + ffserverFeedIP +  ":8090/" + topic + ".mjpg");
           streamingTag.css("display", "block");
 
           streamingTag.show("slow");
@@ -816,17 +816,18 @@
       return new Promise((resolve) => setTimeout(resolve, time));
     }
     var roomNumber = 101;
-    var sensors = ["fire", "gas", "temperature", "humid", "vibrate"];
-    var bulidings = ["TruthCenter"];
-    var bulidingsKor = ["진리관"];
+    var sensors = ["fire", "gas", "temperature", "humid", "vibrate", "longitude", "latitude"]; //경도, 위도
+    var bulidings = ["ThemaPark"];
+    var bulidingsKor = ["테마파크"];
     var chartTabCount = 0;
-    var buildingRoomCount = 10; //How many room in one building
+    var buildingRoomCount = 2; //How many room in one building
     for (var k = 0; k < bulidings.length; k++) {
       for (var i = 0; i < buildingRoomCount; i++) {
         var chartName = bulidingsKor[k] + " " + roomNumber + "호";
         addChartBoard(chartName); //add chartTab ex)공학관 112호
         for (var j = 0; j < sensors.length; j++) {
           var topicName = bulidings[k] + "/" + roomNumber + "/" + sensors[j];
+          //var topicName = sensors[j];
           createChart(chartTabCount, "my-chart-tab-class" + chartTabCount, topicName, "Chart 1");
         }
 
